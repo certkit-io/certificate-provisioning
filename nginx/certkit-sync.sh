@@ -165,6 +165,5 @@ else
   echo "Certificates are up to date; no action needed."
 fi
 
-# Short pause (kept from your original script)
 sleep 0.1
 echo "== $(date -Is) | Done"
