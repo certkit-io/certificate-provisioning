@@ -31,8 +31,8 @@ A lightweight script and config to keep your NGINX TLS certificates updated auto
 Point your server block to the synced files:
 
 ```nginx
-ssl_certificate     /etc/ssl/example.com.pem;
-ssl_certificate_key /etc/ssl/example.com.key;
+ssl_certificate     /etc/nginx/ssl/example.com.pem;
+ssl_certificate_key /etc/nginx/ssl/example.com.key;
 ```
 
 Reload after the first sync:
