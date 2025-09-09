@@ -38,7 +38,7 @@ If you have improvements, fixes, or additional examples (other servers, load bal
 
 If something doesn’t work as expected, or if you’ve found a better way to wire things up, let us know!  
 
-[Open an issue](../../issues) or start a [discussion](../../discussions).
+[Open an issue](../../issues) to submit bugs or tell us what you think.
 
 ---
 
