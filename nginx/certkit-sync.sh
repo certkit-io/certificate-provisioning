@@ -15,6 +15,14 @@ IFS=$'\n\t'
 # To add to cron, and have this script sync daily at 2am:
 # (crontab -l 2>/dev/null; echo "0 2 * * * /path/to/certkit-sync.sh") | crontab -
 
+# Check whether we're running in interactive mode or unattended.
+if [ -t 1 ] ; then 
+    INTERACTIVE_MODE=true
+else
+    INTERACTIVE_MODE=false
+fi
+
+
 # --- Settings (all paths relative to the script directory) ---
 MC_DOWNLOAD_URL="https://dl.min.io/client/mc/release/linux-amd64/mc"
 
@@ -36,7 +44,14 @@ fi
 # Log to a local file in the script folder
 exec > >(tee -a "$LOG_FILE") 2>&1
 
-echo "== $(date -Is) | Starting CertKit synchronization"
+if $INTERACTIVE_MODE; then
+    echo "== $(date -Is) | Starting CertKit synchronization"
+else
+    SLEEP_SECS=$(( 30 + RANDOM % (300 - 30 + 1) ))
+    echo "== $(date -Is) | Starting CertKit synchronization in $SLEEP_SECS seconds."
+    sleep "$SLEEP_SECS"
+fi
+
 echo "Script dir: $SCRIPT_DIR"
 echo "Config:     $CONFIG_FILE"
 [[ -f "$CONFIG_FILE" ]] || { echo "Config not found: $CONFIG_FILE"; exit 1; }
