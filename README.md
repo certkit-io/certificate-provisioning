@@ -1,9 +1,10 @@
 # CertKit SSL Certificate Provisioning Examples
 
-This repository contains **practical examples** for wiring up SSL/TLS certificate syncing from [CertKit](https://certkit.io) into common webservers and platforms.  
-Each folder includes configuration samples, helper scripts, and step-by-step instructions to make integration as smooth as possible.
+This repository contains **practical examples** for wiring up SSL/TLS certificate syncing from [CertKit](https://www.certkit.io) into common webservers and platforms.  
 
-CertKit handles the heavy lifting of **certificate automation, renewal, and storage**. These examples show you how to pull those certificates into your own infrastructure.
+Each folder includes configuration samples, helper scripts, and step-by-step instructions to make integration easy.
+
+CertKit handles **certificate automation, renewal, and storage**. These examples show you how to pull those certificates into your own infrastructure.
 
 ---
 
