@@ -12,9 +12,9 @@ CertKit handles the heavy lifting of **certificate automation, renewal, and stor
 - **[`nginx/`](./nginx/)**  
   Example config snippets and scripts to automatically sync certificates into NGINX.
 
-<!-- - **[`apache/`](./apache/)**  
+- **[`apache/`](./apache/)**  
   Integration examples for Apache HTTP Server, including SSL config and reload helpers.
-
+<!-- 
 - **[`caddy/`](./caddy/)**  
   How to connect CertKit certificates to Caddy, including JSON and Caddyfile examples.
 
