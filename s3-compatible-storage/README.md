@@ -1,6 +1,6 @@
-# CertKit Uses S3 Based Storage for Certificates
+# CertKit Uses S3 Compatible Storage for Certificates
 
-All of your issued certificates are stored in S3 compatible storage.  We use MinIO for the task.  This allows us to make the storage backend scalable and secure, while allowing access with industry standard tooling.
+All of your issued certificates are stored in S3 compatible storage.  We use [MinIO](https://www.min.io/) for the task.  This allows us to make the storage backend scalable and secure, while allowing access with industry standard tooling.
 
 - **S3-Compatible Storage**: Certificates are stored in S3-based backends (MinIO) for easy retrieval with standard tools.  
 - **Secure by Default**: All access uses industry standard request signing, TLS, and least-privilege credentials. No ad-hoc secrets or weak links.  
