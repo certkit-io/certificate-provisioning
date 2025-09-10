@@ -7,8 +7,14 @@ Each folder includes configuration samples, helper scripts, and step-by-step ins
 CertKit handles **certificate automation, renewal, and storage**. These examples show you how to pull those certificates into your own infrastructure.
 
 ---
+## The Basics
 
-## Repository Structure
+- **[`s3-compatible-storage/`](./s3-compatible-storage/)**  
+  Learn how to access your CertKit issued SSL Certificates from our S3-compatible backend storage.  Find links to common CLI tools and language libraries.
+
+---
+
+## Webserver Guides
 
 - **[`nginx/`](./nginx/)**  
   Example config snippets and scripts to automatically sync certificates into NGINX.
