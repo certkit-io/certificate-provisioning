@@ -18,6 +18,11 @@ Since CertKit uses an S3-compatible backend, you can retrieve certificates with 
 - [s3cmd](https://s3tools.org/s3cmd)  
 - [rclone](https://rclone.org/s3/)  
 
+### S3 Command Line Examples
+
+**[`common-cli-examples.md`](./common-cli-examples.md)**  
+  We've put together some simple examples using the three major S3 CLI providers (S3Cmd, mc, AWS SDK)
+
 ### Language SDKs
 - **Go**: [minio-go](https://github.com/minio/minio-go), [AWS SDK for Go](https://docs.aws.amazon.com/sdk-for-go/v2/developer-guide/welcome.html)  
 - **Python**: [boto3](https://boto3.amazonaws.com/), [minio-py](https://github.com/minio/minio-py)  
