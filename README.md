@@ -30,7 +30,7 @@ This repository is **community-driven**. While CertKit provides the core certifi
 If you have improvements, fixes, or additional examples (other servers, load balancers, proxies, or operating systems):
 
 - Submit a **pull request** with your contribution.
-- Open a **discussion or issue** to share ideas or request guidance.
+- Open an **issue** to share ideas or request guidance.
 
 ---
 
