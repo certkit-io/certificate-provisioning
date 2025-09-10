@@ -24,9 +24,9 @@ CertKit handles **certificate automation, renewal, and storage**. These examples
 
 - **[`caddy/`](./caddy/)**  
   Examples for when using Caddy in scenarios where `auto_https` is not feasible.
-<!-- 
+
 - **[`iis/`](./iis/)**  
-  PowerShell and batch scripts to import CertKit certificates into IIS on Windows. -->
+  PowerShell script to import CertKit certificates into IIS on Windows (and create HTTPS binding if needed)
 
 ---
 
