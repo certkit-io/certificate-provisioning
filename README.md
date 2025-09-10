@@ -21,10 +21,10 @@ CertKit handles **certificate automation, renewal, and storage**. These examples
 
 - **[`apache/`](./apache/)**  
   Integration examples for Apache HTTP Server, including SSL config and reload helpers.
-<!-- 
-- **[`caddy/`](./caddy/)**  
-  How to connect CertKit certificates to Caddy, including JSON and Caddyfile examples.
 
+- **[`caddy/`](./caddy/)**  
+  Examples for when using Caddy in scenarios where `auto_https` is not feasible.
+<!-- 
 - **[`iis/`](./iis/)**  
   PowerShell and batch scripts to import CertKit certificates into IIS on Windows. -->
 
