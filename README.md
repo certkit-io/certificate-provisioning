@@ -28,6 +28,9 @@ CertKit handles **certificate automation, renewal, and storage**. These examples
 - **[`iis/`](./iis/)**  
   PowerShell script to import CertKit certificates into IIS on Windows (and create HTTPS binding if needed)
 
+- **[`tomcat/`](./tomcat/)**  
+  Example script and configuration that handles PKCS12 or JKS files to keep your Tomcat server up to date. CertKit automatically produces PKCS12 files for all certificates issued.
+
 ---
 
 ## Contributing
