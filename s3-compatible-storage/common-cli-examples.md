@@ -13,6 +13,7 @@ S3_ACCESS_KEY=""
 S3_SECRET_KEY=""
 
 # The domain your certificate was issued for
+# Wildcard domains like *.example.com would be "example.com" in this case
 CERT_DOMAIN="www.example.com"
 
 s3cmd sync "s3://${S3_BUCKET}/${CERT_DOMAIN}/" ./my-certs/ \
