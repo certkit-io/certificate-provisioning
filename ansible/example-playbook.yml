@@ -1,0 +1,29 @@
+---
+- name: Certkit Example Playbook
+  hosts: yourservers
+  
+  tasks:
+
+    - name: Use Certkit Role To Install Certkit Sync Script
+      include_role:
+        name: certkit.sync
+      vars:
+        # Credentials from the CertKit UI
+        certkit_bucket: certkit-1234
+        certkit_access_key: YOUR_ACCESS_KEY
+        certkit_secret_key: YOUR_SECRET_KEY
+
+        # This is the common name/domain of the certificate.  If it's wildcard, prefix with *.
+        certkit_common_name: "*.yourdomain.com"
+
+        # The directory where the certkit sync script and config file will be placed. Arbitrary, pick what you'd like.
+        # When syncing multiple certificates, each configuration should use a different directory.
+        certkit_dir: /opt/certkit-nginx
+
+        # When certificates are updated, this command will be run, nginx in this case. See our examples for how to notify other services.
+        # IMPORTANT! - You may need to specify the full path to the executable. In many distros, Cron has no PATH configured.
+        certkit_update_cmd: "/usr/sbin/nginx -s reload"
+
+        # The PEM and KEY files will be moved here (and kept up to date). Place wherever your software expects them to be.
+        certkit_pem_destination: "/etc/nginx/yourdomain.pem"
+        certkit_key_destination: "/etc/nginx/yourdomain.key"

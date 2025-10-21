@@ -1,0 +1,3 @@
+---
+- name: Run Certkit Sync
+  command: "{{certkit_dir}}/certkit-sync.sh --start-now"

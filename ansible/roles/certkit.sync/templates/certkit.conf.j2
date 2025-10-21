@@ -1,0 +1,14 @@
+# Get S3 credentials from the CertKit UI
+CERTKIT_S3_ACCESS_KEY="{{certkit_access_key}}"
+CERTKIT_S3_SECRET_KEY="{{certkit_secret_key}}"
+CERTKIT_S3_BUCKET="{{certkit_bucket}}"
+
+# This is the common name/domain of the certificate.  If it's wildcard, prefix with *.
+CERTKIT_CERTIFICATE_DOMAIN="{{certkit_common_name}}"
+
+# When certificates are updated, this command will be run.
+UPDATE_CERTIFICATE_CMD="{{certkit_update_cmd}}"
+
+# The resulting PEM and KEY files will be moved here (and kept up to date)
+DESTINATION_PEM_FILE="{{certkit_pem_destination}}"
+DESTINATION_KEY_FILE="{{certkit_key_destination}}"
