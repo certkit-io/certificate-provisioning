@@ -2,7 +2,6 @@
 
 An Ansible role that will install and configure a script that downloads a Certkit certificate and keeps it up to date.
 
----
 
 ## Overview
 
@@ -18,7 +17,6 @@ An Ansible role that will install and configure a script that downloads a Certki
   * Logs all activity to `certkit.log` (keeping last 2000 log lines)
   * Is periodically run on a Cron schedule.
 
----
 
 ## Setup
 
@@ -26,7 +24,6 @@ An Ansible role that will install and configure a script that downloads a Certki
 2. Call the `certkit.sync` role from your playbook, passing all the required variables (See Example Below).
 3. Check the logfile created at `{{certkit_dir}}/certkit.log` to ensure the first sync was successful.
 
----
 
 ## Example
 
