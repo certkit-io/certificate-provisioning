@@ -10,7 +10,9 @@ CertKit handles **certificate automation, renewal, and storage**. These examples
 ## The Basics
 
 - **[`s3-compatible-storage/`](./s3-compatible-storage/)**  
-  Learn how to access your CertKit issued SSL Certificates from our S3-compatible backend storage.  Find links to common CLI tools and language libraries.
+  Learn how to access your CertKit issued SSL Certificates from our **S3-compatible** backend storage.
+  Find links to common CLI tools and language libraries. <br>
+  **Note:** We do not use AWS S3, your data stays securely within CertKit.
 
 ---
 
