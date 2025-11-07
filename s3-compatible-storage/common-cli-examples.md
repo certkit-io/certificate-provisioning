@@ -1,6 +1,6 @@
 # Examples Using Common S3 CLI Tools to Retrieve Certificates
 
-We have recipes for common webservers and platforms, but sometimes you just want to kick the tires or do things manually.  Here are some simple example commands for common S3 CLI tools to retrieve your issued certificates from CertKit.
+CertKit secure storage is API compatible with all common S3 clients.  We have recipes for common webservers and platforms, but sometimes you just want to kick the tires or do things manually.  Here are some simple example commands for common S3 CLI tools to retrieve your issued certificates from CertKit.
 
 
 ## S3Cmd
