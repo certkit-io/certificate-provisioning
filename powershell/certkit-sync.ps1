@@ -28,7 +28,7 @@ $LOCAL_PFX_DESTINATION = "wildcard.example.com.pfx"
 $CommonParams = @{}
 $CommonParams['AccessKey'] = $CERTKIT_ACCESS_KEY
 $CommonParams['SecretKey'] = $CERTKIT_SECRET_KEY
-$CommonParams['EndpointUrl'] = "https://dev-storage.certkit.io"
+$CommonParams['EndpointUrl'] = "https://storage.certkit.io"
 
 $CertificateChanged = $false
 
