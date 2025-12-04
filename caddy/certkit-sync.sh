@@ -4,13 +4,13 @@ IFS=$'\n\t'
 
 # Expecting certkit.conf file to exist within the same directory as this script.
 # Expected vars:
-# CERTKIT_CERTIFICATE_DOMAIN
 # CERTKIT_S3_ACCESS_KEY
 # CERTKIT_S3_SECRET_KEY
 # CERTKIT_S3_BUCKET
+# CERTKIT_CERTIFICATE_ID
 # DESTINATION_PEM_FILE
 # DESTINATION_KEY_FILE
-# UPDATE_CERTIFICATE_CMD
+# UPDATE_CERTIFICATE_CMD (Optional)
 
 # To add to cron, and have this script sync daily at 2am:
 # (crontab -l 2>/dev/null; echo "0 2 * * * /path/to/certkit-sync.sh") | crontab -
@@ -58,20 +58,18 @@ echo "Config:     $CONFIG_FILE"
 # shellcheck source=/dev/null
 source "$CONFIG_FILE"
 
-# Normalize directory and file names based on wildcard or not
-if [[ "$CERTKIT_CERTIFICATE_DOMAIN" == \*.* ]]; then
-  # Strip leading "*." for folder name
-  S3_FOLDER_NAME="${CERTKIT_CERTIFICATE_DOMAIN#*.}"
-  CERT_BASENAME="wildcard.${CERTKIT_CERTIFICATE_DOMAIN#*.}"
-else
-  S3_FOLDER_NAME="${CERTKIT_CERTIFICATE_DOMAIN}"
-  CERT_BASENAME="${CERTKIT_CERTIFICATE_DOMAIN}"
-fi
+: "${CERTKIT_CERTIFICATE_ID:?CERTKIT_CERTIFICATE_ID must be set in certkit.conf}"
+: "${CERTKIT_S3_ACCESS_KEY:?CERTKIT_S3_ACCESS_KEY must be set in certkit.conf}"
+: "${CERTKIT_S3_SECRET_KEY:?CERTKIT_S3_SECRET_KEY must be set in certkit.conf}"
+: "${CERTKIT_S3_BUCKET:?CERTKIT_S3_BUCKET must be set in certkit.conf}"
+: "${DESTINATION_PEM_FILE:?DESTINATION_PEM_FILE must be set in certkit.conf}"
+: "${DESTINATION_KEY_FILE:?DESTINATION_KEY_FILE must be set in certkit.conf}"
 
-CERT_DIR="${SCRIPT_DIR}/certs/${CERT_BASENAME}"
-CERTKIT_PEM_FILE="${CERT_BASENAME}.pem"
-CERTKIT_KEY_FILE="${CERT_BASENAME}.key"
+# Base S3 folder is /certificate-{id}/
+S3_FOLDER_NAME="certificate-${CERTKIT_CERTIFICATE_ID}"
 
+# Local directory for this certificate
+CERT_DIR="${SCRIPT_DIR}/certs/${S3_FOLDER_NAME}"
 mkdir -p "$CERT_DIR"
 
 # Ensure MinIO client (mc) is present locally next to the script
@@ -116,8 +114,8 @@ files_differ() {
   return 0    # differ
 }
 
-SRC_PEM="${CERT_DIR}/${CERTKIT_PEM_FILE}"
-SRC_KEY="${CERT_DIR}/${CERTKIT_KEY_FILE}"
+SRC_PEM=$(echo "$CERT_DIR"/*.pem)
+SRC_KEY=$(echo "$CERT_DIR"/*.key)
 
 NEED_UPDATE=false
 REASONS=()

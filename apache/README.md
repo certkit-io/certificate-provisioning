@@ -99,8 +99,8 @@ CERTKIT_S3_ACCESS_KEY=""
 CERTKIT_S3_SECRET_KEY=""
 CERTKIT_S3_BUCKET=""
 
-# Domain/Apache specific configuration
-CERTKIT_CERTIFICATE_DOMAIN="*.example.com"
+# Certificate/Apache specific configuration
+CERTKIT_CERTIFICATE_ID=""
 UPDATE_CERTIFICATE_CMD="systemctl reload apache2"
 DESTINATION_PEM_FILE="/etc/ssl/certs/example.com.pem"
 DESTINATION_KEY_FILE="/etc/ssl/private/example.com.key"

@@ -90,8 +90,8 @@ CERTKIT_S3_ACCESS_KEY=""
 CERTKIT_S3_SECRET_KEY=""
 CERTKIT_S3_BUCKET=""
 
-# Domain/Caddy specific configuration
-CERTKIT_CERTIFICATE_DOMAIN="www.example.com"
+# Certificate/Caddy specific configuration
+CERTKIT_CERTIFICATE_ID=""
 UPDATE_CERTIFICATE_CMD="caddy reload --config /etc/caddy/Caddyfile --force"
 DESTINATION_PEM_FILE="/etc/caddy/ssl/www.example.com.pem"
 DESTINATION_KEY_FILE="/etc/caddy/ssl/www.example.com.key"

@@ -3,10 +3,10 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # --- Expected vars in certkit.conf ---
-# CERTKIT_CERTIFICATE_DOMAIN
 # CERTKIT_S3_ACCESS_KEY
 # CERTKIT_S3_SECRET_KEY
 # CERTKIT_S3_BUCKET
+# CERTKIT_CERTIFICATE_ID
 # DESTINATION_KEYSTORE_FILE     # e.g. /etc/tomcat/example.com.p12 or .jks
 # UPDATE_CERTIFICATE_CMD        # e.g. "systemctl restart tomcat9"
 
@@ -56,18 +56,17 @@ echo "Config:     $CONFIG_FILE"
 # shellcheck source=/dev/null
 source "$CONFIG_FILE"
 
-# Normalize directory and file names based on wildcard or not
-if [[ "$CERTKIT_CERTIFICATE_DOMAIN" == \*.* ]]; then
-  # Strip leading "*." for folder name
-  S3_FOLDER_NAME="${CERTKIT_CERTIFICATE_DOMAIN#*.}"
-  CERT_BASENAME="wildcard.${CERTKIT_CERTIFICATE_DOMAIN#*.}"
-else
-  S3_FOLDER_NAME="${CERTKIT_CERTIFICATE_DOMAIN}"
-  CERT_BASENAME="${CERTKIT_CERTIFICATE_DOMAIN}"
-fi
+: "${CERTKIT_CERTIFICATE_ID:?CERTKIT_CERTIFICATE_ID must be set in certkit.conf}"
+: "${CERTKIT_S3_ACCESS_KEY:?CERTKIT_S3_ACCESS_KEY must be set in certkit.conf}"
+: "${CERTKIT_S3_SECRET_KEY:?CERTKIT_S3_SECRET_KEY must be set in certkit.conf}"
+: "${CERTKIT_S3_BUCKET:?CERTKIT_S3_BUCKET must be set in certkit.conf}"
+: "${DESTINATION_KEYSTORE_FILE:?DESTINATION_KEYSTORE_FILE must be set in certkit.conf}"
 
-CERT_DIR="${SCRIPT_DIR}/certs/${CERT_BASENAME}"
-CERTKIT_PFX_FILE="${CERT_BASENAME}.pfx"
+# Base S3 folder is /certificate-{id}/
+S3_FOLDER_NAME="certificate-${CERTKIT_CERTIFICATE_ID}"
+
+# Local directory for this certificate
+CERT_DIR="${SCRIPT_DIR}/certs/${S3_FOLDER_NAME}"
 
 mkdir -p "$CERT_DIR"
 
@@ -113,8 +112,9 @@ files_differ() {
   return 0    # differ
 }
 
-SRC_PFX="${CERT_DIR}/${CERTKIT_PFX_FILE}"
-SRC_JKS="${CERT_DIR}/${CERT_BASENAME}.jks"
+
+SRC_PFX=$(echo "$CERT_DIR"/*.pfx)
+SRC_JKS="${SRC_PFX%.pfx}.jks"
 
 NEED_UPDATE=false
 REASONS=()
