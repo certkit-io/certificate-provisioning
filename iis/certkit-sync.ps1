@@ -1,39 +1,44 @@
+$ErrorActionPreference = "Stop"
+
 # These values come from the CertKit UI
 $CERTKIT_S3_ACCESS_KEY = ""
 $CERTKIT_S3_SECRET_KEY = ""
 $CERTKIT_S3_BUCKET = ""
 
 # These values will need to be configured on a per certificate/site basis
-$CERTKIT_CERTIFICATE_DOMAIN = "*.example.com"
-$IIS_SITE_NAME = "ExampleWebSite"
+$CERTKIT_CERTIFICATE_ID = ""
+$IIS_SITE_NAME = "ExampleSite"
 $IIS_HOST_HEADER = "www.example.com"
 
+# Base S3 folder is /certificate-{id}/
+$S3_FOLDER_NAME = "certificate-$CERTKIT_CERTIFICATE_ID"
+$SCRIPT_DIR = Split-Path -Parent $PSCommandPath
+$CERT_DIR = Join-Path $SCRIPT_DIR "certs/$S3_FOLDER_NAME"
 
-if ($CERTKIT_CERTIFICATE_DOMAIN.StartsWith("*.")) {
-    # Wildcard case
-    $S3_FOLDER_NAME = $CERTKIT_CERTIFICATE_DOMAIN.Substring(2)      # "example.com"
-    $CERT_BASENAME = "wildcard.$($S3_FOLDER_NAME)"                  # "wildcard.example.com"
-} else {
-    # Normal case
-    $S3_FOLDER_NAME = $CERTKIT_CERTIFICATE_DOMAIN                   # "sub.example.com"
-    $CERT_BASENAME = $CERTKIT_CERTIFICATE_DOMAIN                    # "sub.example.com"
-}
-
-$DESTINATION_PFX_FILE = ".\$CERT_BASENAME.pfx"
-
-$mcPath = ".\mc.exe"
-if (-Not (Test-Path $mcPath)) {
+$MC_BIN = Join-Path $SCRIPT_DIR "mc.exe"
+if (-Not (Test-Path $MC_BIN)) {
     Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile $mcPath
 }
 
 # Sync PFX from CertKit
-& $mcPath alias set certkit https://storage.certkit.io $CERTKIT_S3_ACCESS_KEY $CERTKIT_S3_SECRET_KEY
-& $mcPath cp "certkit/$CERTKIT_S3_BUCKET/$S3_FOLDER_NAME/$CERT_BASENAME.pfx" "$DESTINATION_PFX_FILE"
+& $MC_BIN alias set certkit https://storage.certkit.io $CERTKIT_S3_ACCESS_KEY $CERTKIT_S3_SECRET_KEY
+& $MC_BIN mirror --overwrite "certkit/$CERTKIT_S3_BUCKET/$S3_FOLDER_NAME/" "$CERT_DIR"
 
-if (-Not (Test-Path $DESTINATION_PFX_FILE)) { throw "Download failed." }
+$PFX_FILE = (Get-ChildItem $CERT_DIR -Filter *.pfx | Select-Object -First 1).FullName
 
 # Import new cert into store
-$newCert = Import-PfxCertificate -FilePath $DESTINATION_PFX_FILE -CertStoreLocation "Cert:\LocalMachine\My" -Password (ConvertTo-SecureString $CERTKIT_S3_SECRET_KEY -AsPlainText -Force)
+$newCert = Import-PfxCertificate -FilePath $PFX_FILE -CertStoreLocation "Cert:\LocalMachine\My" -Password (ConvertTo-SecureString $CERTKIT_S3_SECRET_KEY -AsPlainText -Force)
+
+# Make sure we set the FriendlyName to something reasonable
+$store = New-Object System.Security.Cryptography.X509Certificates.X509Store("My","LocalMachine")
+$store.Open([System.Security.Cryptography.X509Certificates.OpenFlags]::ReadWrite)
+
+$certInStore = $store.Certificates |
+    Where-Object { ($_.Thumbprint -replace ' ', '') -ieq $newCert.Thumbprint }
+
+if ($certInStore) {
+    $certInStore.FriendlyName = " CertKit Certificate $CERTKIT_CERTIFICATE_ID"
+}
 
 # Find IIS binding
 Import-Module WebAdministration
@@ -42,17 +47,22 @@ $binding = Get-WebBinding -Name $IIS_SITE_NAME -Protocol "https" -Port 443
 # Get current bound cert thumbprint (if any)
 $currentThumbprint = $null
 if ($binding) {
-    $sslHash = $binding.bindingInformation.Split(':') | ForEach-Object { $_ } | Out-Null
-    $currentThumbprint = (Get-Item "Cert:\LocalMachine\My\$($binding.CertificateHash -join '')").Thumbprint 2>$null
+    $thumb = ($binding.CertificateHash -join '')
+    $certPath = "Cert:\LocalMachine\My\$thumb"
+
+    if (Test-Path $certPath) {
+        $currentThumbprint = (Get-Item $certPath).Thumbprint
+    }
 }
 
 if ($currentThumbprint -eq $newCert.Thumbprint) {
     Write-Host "Certificate already current for $IIS_SITE_NAME. No update needed."
 } else {
     Write-Host "Updating IIS binding with new certificate $($newCert.Thumbprint)..."
-
     if ($binding) {
-        $binding.RemoveSslCertificate()
+        if($currentThumbprint) {
+            $binding.RemoveSslCertificate()
+        }
     } else { 
         New-WebBinding -Name $IIS_SITE_NAME -HostHeader $IIS_HOST_HEADER -Protocol "https" -Port 443 -SslFlags 1
     }
@@ -60,13 +70,13 @@ if ($currentThumbprint -eq $newCert.Thumbprint) {
     (Get-WebBinding -Name $IIS_SITE_NAME -Protocol "https" -Port 443).AddSslCertificate($newCert.Thumbprint, "My")
 
     Write-Host "IIS binding updated."
-}
 
-# Optional cleanup of old certs for this domain
-$oldCerts = Get-ChildItem Cert:\LocalMachine\My | Where-Object {
-    $_.Subject -eq "CN=$CERTKIT_CERTIFICATE_DOMAIN" -and $_.Thumbprint -ne $newCert.Thumbprint
-}
-$oldCerts | ForEach-Object {
-    Write-Host "Removing old cert: $($_.Thumbprint)"
-    Remove-Item $_.PSPath -Force
+    # Optional cleanup of old certs for this domain
+    $oldCerts = Get-ChildItem Cert:\LocalMachine\My | Where-Object {
+        $_.Thumbprint -eq $currentThumbprint -and $_.Thumbprint -ne $newCert.Thumbprint
+    }
+    $oldCerts | ForEach-Object {
+        Write-Host "Removing old cert: $($_.Thumbprint)"
+        Remove-Item $_.PSPath -Force
+    }
 }
