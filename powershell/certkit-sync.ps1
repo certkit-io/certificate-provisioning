@@ -15,10 +15,10 @@ $CERTKIT_SECRET_KEY = ""
 $CERTKIT_BUCKET = ""
 
 # Find your certificate's storage key using the Certkit storage browser UI.
-$CERTKIT_STORAGE_KEY = "example.com/wildcard.example.com.pfx"
+$CERTKIT_STORAGE_KEY = "certificate-ab12/example.com.wildcard.ec.pfx"
 
 # Where to store the downloaded certificate
-$LOCAL_PFX_DESTINATION = "wildcard.example.com.pfx"
+$LOCAL_PFX_DESTINATION = "example.com.wildcard.ec.pfx"
 
 #
 # END VARIABLES
