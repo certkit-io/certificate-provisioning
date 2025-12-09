@@ -106,8 +106,8 @@ CERTKIT_S3_ACCESS_KEY=""
 CERTKIT_S3_SECRET_KEY=""
 CERTKIT_S3_BUCKET=""
 
-# Domain/Tomcat specific configuration
-CERTKIT_CERTIFICATE_DOMAIN="*.example.com"
+# Certificate specific configuration
+CERTKIT_CERTIFICATE_ID=""
 
 # Use PKCS#12 keystore (preferred)
 DESTINATION_KEYSTORE_FILE="/etc/tomcat/example.com.pfx"

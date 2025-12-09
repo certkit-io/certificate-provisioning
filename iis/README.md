@@ -8,7 +8,7 @@ A PowerShell script and config to keep your IIS TLS certificates updated automat
 
 * Downloads the latest certificate (PFX) from CertKit using [minio-client](https://docs.min.io/community/minio-object-store/reference/minio-mc.html#quickstart).
 * Imports the certificate into the **LocalMachine\My** certificate store.
-* Cleans up older certificates for the same domain to avoid clutter.
+* Cleans up previous certificate for that binding if necessary, to avoid clutter.
 * Binds the new certificate to the specified IIS site.
 * Can be scheduled via Windows Task Scheduler for hands-free automation.
 

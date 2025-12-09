@@ -1,16 +1,13 @@
 # Install CertKit Sync Script Using Ansible
 
-An Ansible role that will install and configure a script that downloads a Certkit certificate and keeps it up to date.
+An example playbook that installs and configures a script to download a Certkit certificate and keep it up to date.
 
 
 ## Overview
 
-* Installs a simple syncronization script to whichever directory you specify.
-* Builds a configuration file from variables you give it.
-* Syncronizes a single certificate.
-  * To sync multiple certificates, call the role multiple times. Each call should use a different `certkit_dir`!
+* Uses our [Certkit Sync Role](https://github.com/certkit-io/ansible-role-sync) to install a simple synchronization script.
 * Once installed, the script:
-  * Syncs the latest certificate from CertKit into a local directory using [minio-client](https://docs.min.io/community/minio-object-store/reference/minio-mc.html#quickstart).
+  * Syncs the latest certificate from CertKit into a local directory.
   * Copies certificate into place if it is changed or missing.
   * Optionally runs a post-update command (e.g. `nginx -s reload`).
   * Logs all activity to `certkit.log` (keeping last 2000 log lines)
@@ -19,26 +16,35 @@ An Ansible role that will install and configure a script that downloads a Certki
 
 ## Setup
 
-1. Place the `certkit.sync` role in your roles directory.
-2. Call the `certkit.sync` role from your playbook, passing all the required variables (See example below).
-3. Check the logfile created at `{{certkit_dir}}/certkit.log` to ensure the first sync was successful.
+1. Download the role from [Ansible Galaxy](https://galaxy.ansible.com/ui/standalone/roles/certkit_io/sync/). In the directory containing your playbook, run:
+
+   ```bash
+   ansible-galaxy role install certkit_io.sync
+   ```
+1. Call the `certkit_io.sync` role from your playbook, passing all the required variables (See example below).
+1. Run the playbook:
+
+   ```bash
+   ansible-playbook example-playbook.yml
+   ```
+1. Check the logfile created at `{{certkit_dir}}/certkit.log` to ensure the first sync was successful.
 
 
 ## Example
 
-Place this task in your playbook. See [`example-playbook.yml`](example-playbook.yml) for more details:
+You can call the role in any way Ansible allows. This example uses a task in the playbook. See [`example-playbook.yml`](example-playbook.yml) for more details:
 
 ```yml
 - include_role:
-    name: certkit.sync
+    name: certkit_io.sync
   vars:
     # Credentials from the CertKit UI
     certkit_bucket: certkit-1234
     certkit_access_key: YOUR_ACCESS_KEY
     certkit_secret_key: YOUR_SECRET_KEY
 
-    # Domain/Server specific configuration
-    certkit_common_name: "*.yourdomain.com"
+    # Certificate and Server specific configuration
+    certkit_certificate_id: ab12
     certkit_dir: /opt/certkit-nginx
     certkit_update_cmd: "/usr/sbin/nginx -s reload"
     certkit_pem_destination: "/etc/nginx/yourdomain.pem"

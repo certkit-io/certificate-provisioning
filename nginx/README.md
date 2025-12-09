@@ -77,8 +77,8 @@ CERTKIT_S3_ACCESS_KEY=""
 CERTKIT_S3_SECRET_KEY=""
 CERTKIT_S3_BUCKET=""
 
-# Domain/NGINX specific configuration
-CERTKIT_CERTIFICATE_DOMAIN="*.example.com"
+# Certificate/NGINX specific configuration
+CERTKIT_CERTIFICATE_ID=""
 UPDATE_CERTIFICATE_CMD="nginx -s reload"
 DESTINATION_PEM_FILE="/etc/nginx/ssl/example.com.pem"
 DESTINATION_KEY_FILE="/etc/nginx/ssl/example.com.key"
