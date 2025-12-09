@@ -22,7 +22,7 @@ if (-Not (Test-Path $MC_BIN)) {
 
 # Sync PFX from CertKit
 & $MC_BIN alias set certkit https://storage.certkit.io $CERTKIT_S3_ACCESS_KEY $CERTKIT_S3_SECRET_KEY
-& $MC_BIN mirror --overwrite "certkit/$CERTKIT_S3_BUCKET/$S3_FOLDER_NAME/" "$CERT_DIR"
+& $MC_BIN mirror --overwrite "certkit/$CERTKIT_S3_BUCKET/$S3_FOLDER_NAME" "$CERT_DIR"
 
 $PFX_FILE = (Get-ChildItem $CERT_DIR -Filter *.pfx | Select-Object -First 1).FullName
 
