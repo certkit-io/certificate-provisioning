@@ -17,7 +17,7 @@ $CERT_DIR = Join-Path $SCRIPT_DIR "certs/$S3_FOLDER_NAME"
 
 $MC_BIN = Join-Path $SCRIPT_DIR "mc.exe"
 if (-Not (Test-Path $MC_BIN)) {
-    Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile $mcPath
+    Invoke-WebRequest -Uri "https://dl.min.io/client/mc/release/windows-amd64/mc.exe" -OutFile $MC_BIN
 }
 
 # Sync PFX from CertKit
