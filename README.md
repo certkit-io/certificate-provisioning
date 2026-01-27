@@ -6,7 +6,12 @@ Each folder includes configuration samples, helper scripts, and step-by-step ins
 
 CertKit handles **certificate automation, renewal, and storage**. These examples show you how to pull those certificates into your own infrastructure.
 
----
+
+## When Should I Use These Examples?
+
+These examples are a great starting point when you need custom or unique certificate deployment logic. For most cases, we recommend you try our [CertKit Agent](https://github.com/certkit-io/certkit-agent) which is a simpler and more user friendly way to provision CertKit certificates.
+
+
 ## The Basics
 
 - **[`s3-compatible-storage/`](./s3-compatible-storage/)**  
@@ -14,7 +19,6 @@ CertKit handles **certificate automation, renewal, and storage**. These examples
   Find links to common CLI tools and language libraries. <br>
   **Note:** We do not use AWS S3, your data stays securely within CertKit.
 
----
 
 ## Webserver Guides
 
@@ -33,7 +37,6 @@ CertKit handles **certificate automation, renewal, and storage**. These examples
 - **[`tomcat/`](./tomcat/)**  
   Example script and configuration that handles PKCS12 or JKS files to keep your Tomcat server up to date. CertKit automatically produces PKCS12 files for all certificates issued.
 
----
 
 ## Contributing
 
@@ -43,7 +46,6 @@ If you have improvements, fixes, or additional examples (other servers, load bal
 - Submit a **pull request** with your contribution.
 - Open an **issue** to share ideas or request guidance.
 
----
 
 ## Feedback
 
@@ -51,6 +53,6 @@ If something doesn’t work as expected, or if you’ve found a better way to wi
 
 [Open an issue](../../issues) to submit bugs or tell us what you think.
 
----
 
+<br><br>
 Made by the team behind [CertKit](https://certkit.io), [TrackJS](https://trackjs.com), and [Request Metrics](https://requestmetrics.com).
