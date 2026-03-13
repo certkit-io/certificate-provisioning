@@ -7,16 +7,13 @@ CertKit secure storage is API compatible with all common S3 clients.  We have re
 [S3cmd](https://s3tools.org/s3cmd) is a simple and lightweight tool that's available on most platforms.  Using the `sync` feature we can pull everything from the CertKit storage bucket and sync it with a local file system.
 
 ```bash
-# Get these from the CertKit UI
-S3_BUCKET=""
+# Get these from the CertKit Storage Browser UI
+S3_BUCKET=""      # Should look like `certkit-wxyz`
 S3_ACCESS_KEY=""
 S3_SECRET_KEY=""
+CERT_DIR=""       # Should look like `certificate-abcd`
 
-# The domain your certificate was issued for
-# Wildcard domains like *.example.com would be "example.com" in this case
-CERT_DOMAIN="www.example.com"
-
-s3cmd sync "s3://${S3_BUCKET}/${CERT_DOMAIN}/" ./my-certs/ \
+s3cmd sync "s3://${S3_BUCKET}/${CERT_DIR}/" ./my-certs/ \
     --access_key="${S3_ACCESS_KEY}" \
     --secret_key="${S3_SECRET_KEY}" \
     --host="storage.certkit.io" \
@@ -37,18 +34,16 @@ chmod +x mc
 
 ```bash
 
-# Get these from the CertKit UI
-S3_BUCKET=""
+# Get these from the CertKit Storage Browser UI
+S3_BUCKET=""      # Should look like `certkit-wxyz`
 S3_ACCESS_KEY=""
 S3_SECRET_KEY=""
-
-# The domain your certificate was issued for
-CERT_DOMAIN="www.example.com"
+CERT_DIR=""       # Should look like `certificate-abcd`
 
 # Export the ALIAS so MinIO client can see it
 export MC_HOST_certkit="https://${S3_ACCESS_KEY}:${S3_SECRET_KEY}@storage.certkit.io"
 
-mc mirror --overwrite "certkit/${S3_BUCKET}/${CERT_DOMAIN}/" ./my-certs/
+mc mirror --overwrite "certkit/${S3_BUCKET}/${CERT_DIR}/" ./my-certs/
 
 ```
 
@@ -57,20 +52,18 @@ mc mirror --overwrite "certkit/${S3_BUCKET}/${CERT_DOMAIN}/" ./my-certs/
 No one really likes using Amazon's AWS CLI library - it's ergonomics are beyond questionable - but it's reasonably ubiquitous. So here ya go. 
 
 ```bash
-# Get these from the CertKit UI
-S3_BUCKET=""
+# Get these from the CertKit Storage Browser UI
+S3_BUCKET=""      # Should look like `certkit-wxyz`
 S3_ACCESS_KEY=""
 S3_SECRET_KEY=""
-
-# The domain your certificate was issued for
-CERT_DOMAIN="www.example.com"
+CERT_DIR=""       # Should look like `certificate-abcd`
 
 # --- Export credentials so CLI can use them
 export AWS_ACCESS_KEY_ID=$S3_ACCESS_KEY
 export AWS_SECRET_ACCESS_KEY=$S3_SECRET_KEY
 
 # --- Command ---
-aws s3 sync "s3://${S3_BUCKET}/${CERT_DOMAIN}" ./my-certs/ \
+aws s3 sync "s3://${S3_BUCKET}/${CERT_DIR}" ./my-certs/ \
   --endpoint-url "https://storage.certkit.io" \
   --exact-timestamps
 
